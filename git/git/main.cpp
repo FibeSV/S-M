@@ -9,6 +9,7 @@ struct vec { double x[3]; int len = 3; };
 double e = 0.001;
 //Тау, используемая в методе
 double t = 0.618;
+int kol = 0, sumkol =0;
 double R(vec x0, double l, vec d) {
 	vec corr;
 	for (int i = 0; i < corr.len; i++) {
@@ -19,14 +20,14 @@ double R(vec x0, double l, vec d) {
 		+ corr.x[2] + 4 / corr.x[2] + 10);
 }
 double searchmin(vec dir, vec& y, double dl) {
-	int n = 1; double a, b, x1, x2, xmin;
+	kol = 1; double a, b, x1, x2, xmin;
 	if (R(y, 0, dir) < R(y, dl, dir)) {
 		dl = -dl;
 	}
-	while (R(y, (n - 1) * dl, dir) > R(y, (n)* dl, dir)) {
-		n++;
+	while (R(y, (kol - 1) * dl, dir) > R(y, (kol)* dl, dir)) {
+		kol++;
 	}
-	a = (n - 2) * dl; b = (n)* dl;
+	a = (kol - 2) * dl; b = (kol)* dl;
 	//считаем функцию методом золотого сечения в цикле
 	while (abs(b - a) > e) {
 		// Считаем х1 и х2
@@ -40,6 +41,7 @@ double searchmin(vec dir, vec& y, double dl) {
 			a = x1;
 		}
 		xmin = 0.5 * (a + b);
+		kol++;
 	}
 	y.x[0] += xmin*dir.x[0];
 	y.x[1] += xmin*dir.x[1];
@@ -100,7 +102,8 @@ void grsh(vec(&d)[3], vec l) {
 }
 void output(vec y, int& k) {
 	k++;
-	cout << k << "\t" << R(y,0,y) << "\t" << y.x[0]<< "\t" <<y.x[1] << "\t" << y.x[2]<< endl;
+
+	cout << k << "\t" << sumkol <<"\t"<< R(y,0,y) << "\t" << y.x[0]<< "\t" <<y.x[1] << "\t" << y.x[2]<< endl;
 }
 int main() {
 	// Точность 
@@ -123,11 +126,12 @@ int main() {
 	output(y, k);
 	do {
 		x = y;
+		sumkol = 0;
 		vec n;
 		for (int i = 0; i < y.len; i++) {
 			vec dir = d[i];
 			n.x[i] = searchmin(dir, y, dl);
-
+			sumkol += kol;
 		}
 		grsh(d, n);
 		output(y, k);

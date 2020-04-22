@@ -1,3 +1,3 @@
 ﻿  main.cpp
-C:\Users\Mac\Desktop\S+M\git\git\main.cpp(112,9): warning C4101:  dn: неиспользованная локальная переменная
+C:\Users\Mac\Desktop\S+M\git\git\main.cpp(115,9): warning C4101:  dn: неиспользованная локальная переменная
   git.vcxproj -> C:\Users\Mac\Desktop\S+M\git\Debug\git.exe
