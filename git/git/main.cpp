@@ -41,6 +41,9 @@ double searchmin(vec dir, vec& y, double dl) {
 		}
 		xmin = 0.5 * (a + b);
 	}
+	y.x[0] += xmin*dir.x[0];
+	y.x[1] += xmin*dir.x[1];
+	y.x[2] += xmin*dir.x[2];
 	return xmin;
 }
 double norm(vec x) {
@@ -62,7 +65,7 @@ bool usl(vec x, vec y) {
 void grsh(vec(&d)[3], vec l) {
 	vec a[3], b[3], d1[3];
 	for (int i = 0; i < d[0].len; i++) {
-		if (l.x[i] = 0) {
+		if (l.x[i] == 0) {
 			a[i] = d[i];
 		}
 		else {
@@ -74,7 +77,7 @@ void grsh(vec(&d)[3], vec l) {
 		};
 	}
 	for (int j = 0; j < d[0].len; j++) {
-		if (j = 0) {
+		if (j == 0) {
 			b[j] = a[j];
 			d1[j].x[0] = b[j].x[0] / norm(b[j]);
 			d1[j].x[1] = b[j].x[1] / norm(b[j]);
@@ -97,6 +100,7 @@ void grsh(vec(&d)[3], vec l) {
 }
 void output(vec y, int& k) {
 	k++;
+	cout << k << "\t" << R(y,0,y) << "\t" << y.x[0]<< "\t" <<y.x[1] << "\t" << y.x[2]<< endl;
 }
 int main() {
 	// Точность 
@@ -106,7 +110,7 @@ int main() {
 	//Переменные для направлений
 	vec d[3];
 	double dn[4][4];
-	int k;
+	int k=0;
 	//Точки x,y,z
 	vec x, y;
 	d[0].x[0] = 1; d[0].x[1] = 0; d[0].x[2] = 0;
@@ -123,6 +127,7 @@ int main() {
 		for (int i = 0; i < y.len; i++) {
 			vec dir = d[i];
 			n.x[i] = searchmin(dir, y, dl);
+
 		}
 		grsh(d, n);
 		output(y, k);
