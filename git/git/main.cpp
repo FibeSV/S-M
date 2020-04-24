@@ -5,7 +5,7 @@
 #include <algorithm>
 using namespace std;
 // Задаем функцию
-struct vec { double x[3]; int len = 3; };
+struct vec { double x[3] = {0.0,0.0,0.0}; int len = 3; };
 double e = 0.001;
 //Тау, используемая в методе
 double t = 0.618;
@@ -99,6 +99,8 @@ void grsh(vec(&d)[3], vec l) {
 			d1[j].x[2] = b[j].x[2] / norm(b[j]);
 		}
 	}
+	for (int i=0;i<3;i++)
+	d[i] = d1[i];
 }
 void output(vec y, int& k) {
 	k++;
