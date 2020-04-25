@@ -64,6 +64,23 @@ bool usl(vec x, vec y) {
 	}
 	else return true;
 }
+vec proj(vec a, vec b) {
+	double scal = (a.x[0] * b.x[0] + a.x[1] * b.x[1] + a.x[2] * b.x[2]) / (b.x[0] * b.x[0] + b.x[1] * b.x[1] + b.x[2] * b.x[2]);
+	vec d;
+	for (int i = 0; i < 3; i++)
+		d.x[i] = scal * b.x[i];
+	return d;
+}
+void prov(vec d[3]) {
+	cout << (d[0].x[0] * d[1].x[0] + d[0].x[1] * d[1].x[1] + d[0].x[2] * d[1].x[2]) << endl;
+	cout << (d[0].x[0] * d[2].x[0] + d[0].x[1] * d[2].x[1] + d[0].x[2] * d[2].x[2]) << endl;
+	cout << (d[2].x[0] * d[1].x[0] + d[2].x[1] * d[1].x[1] + d[2].x[2] * d[1].x[2]) << endl;
+	if ((abs(d[0].x[0] * d[1].x[0] + d[0].x[1] * d[1].x[1] + d[0].x[2] * d[1].x[2]) < e) and
+		(abs(d[0].x[0] * d[2].x[0] + d[0].x[1] * d[2].x[1] + d[0].x[2] * d[2].x[2]) < e) and
+		(abs(d[2].x[0] * d[1].x[0] + d[2].x[1] * d[1].x[1] + d[2].x[2] * d[1].x[2]) < e)) {
+		cout << "Вектора ортогональны" << endl;
+	}
+}
 void grsh(vec(&d)[3], vec l) {
 	vec a[3], b[3], d1[3];
 	for (int i = 0; i < d[0].len; i++) {
@@ -88,11 +105,13 @@ void grsh(vec(&d)[3], vec l) {
 		else {
 			b[j] = a[j];
 			for (int i = 0; i < j; i++) {
-				b[j].x[0] -= a[j].x[0] * d1[i].x[0] * d1[i].x[0];
+				vec temp = proj(a[j],b[i]);
+				b[j].x[0] -= temp.x[0];
+				b[j].x[1] -= temp.x[1];
+				b[j].x[2] -= temp.x[2];
+				/*b[j].x[0] -= a[j].x[0] * d1[i].x[0] * d1[i].x[0];
 				b[j].x[1] -= a[j].x[1] * d1[i].x[1] * d1[i].x[1];
-				b[j].x[2] -= a[j].x[2] * d1[i].x[2] * d1[i].x[2];
-
-
+				b[j].x[2] -= a[j].x[2] * d1[i].x[2] * d1[i].x[2];*/
 			}
 			d1[j].x[0] = b[j].x[0] / norm(b[j]);
 			d1[j].x[1] = b[j].x[1] / norm(b[j]);
@@ -134,8 +153,10 @@ int main() {
 			vec dir = d[i];
 			n.x[i] = searchmin(dir, y, dl);
 			sumkol += kol;
+			
 		}
 		grsh(d, n);
+		prov(d);
 		output(y, k);
 	} while (usl(x, y));
 }
